@@ -2,7 +2,7 @@
 
 #!/bin/bash
 # Kernel Clonning Script
-if [ -d "AnyKernel" ]; then
+if [ -d "Anykernel" ]; then
  echo "AnyKernel Exist Skipping Download"
  else
 git clone --depth=1 https://github.com/harshpreets63/AnyKernel3 Anykernel
