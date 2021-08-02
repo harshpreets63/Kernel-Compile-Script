@@ -20,10 +20,6 @@ fi
 KERNEL_DIR="$(pwd)"
 FINAL_DIR="$KERNEL_DIR/Final"
 
-# Start Build
-
-bash run.sh
-
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_HOST="Beast"
@@ -40,8 +36,8 @@ nocol='\033[0m'
 # Set Date
 DATE=$(TZ=Asia/Jakarta date +"%Y%m%d-%T")
 
-TC_DIR="$KERNEL_DIR/CLANG-13"
-MPATH="$TC_DIR/clang/bin/:$PATH"
+TC_DIR="$KERNEL_DIR"
+MPATH="$TC_DIR/CLANG-13/bin/:$PATH"
 rm -f out/arch/arm64/boot/Image.gz-dtb
 make O=out vendor/violet-perf_defconfig
 PATH="$MPATH" make -j16 O=out \
@@ -58,14 +54,16 @@ PATH="$MPATH" make -j16 O=out \
 
 
 python2 scripts/ufdt/libufdt/utils/src/mkdtboimg.py create out/arch/arm64/boot/dtbo.img --page_size=4096 out/arch/arm64/boot/dts/qcom/sm6150-idp-overlay.dtbo
-cp out/arch/arm64/boot/Image.gz-dtb $KERNEL_DIRAnykernel
+cp out/arch/arm64/boot/Image.gz-dtb $KERNEL_DIR/Anykernel
 cp out/arch/arm64/boot/dtbo.img $KERNEL_DIR/Anykernel
-cd $KERNEL_DIR/Anykernel
-if [ -f "Image.gz-dtb" ]; then
-    zip -r9 PeruNoob-"$DATE".zip"* -x .git README.md *placeholder
-cp /home/ubuntu/Kernel/Anykernel/PeruNoob-"$DATE".zip $KERNEL_DIR/
-rm /home/ubuntu/Kernel/Anykernel/Image.gz-dtb
-rm /home/ubuntu/Kernel/Anykernel/PeruNoob-"$DATE".zip
+
+if [ -f "$KERNEL_DIR/Anykernel/Image.gz-dtb" ]; then
+    #zip -r9 $KERNEL_DIR/Anykernel/PeruNoob-$DATE.zip"* -x .git README.md *placeholder
+    cd $KERNEL_DIR/Anykernel
+    zip -r PeruNoob-$DATE.zip * -x .git README.md *.zip
+cp  $KERNEL_DIR/Anykernel/PeruNoob-$DATE.zip $KERNEL_DIR/
+rm  $KERNEL_DIR/Anykernel/Image.gz-dtb
+rm  $KERNEL_DIR/Anykernel/PeruNoob-$DATE.zip
 
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
@@ -76,4 +74,5 @@ echo -e "$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)
     curl --upload-file $KERNEL_DIR/PeruNoob-"$DATE".zip https://transfer.sh/PeruNoob-"$DATE".zip
 else
     echo "Build failed!"
+   
 fi
