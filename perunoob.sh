@@ -72,6 +72,8 @@ DIFF=$(($BUILD_END - $BUILD_START))
 echo -e "$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
 
     echo "Build success!"
+    echo "Uploading Build"
+    curl --upload-file $KERNEL_DIR/PeruNoob-"$DATE".zip https://transfer.sh/PeruNoob-"$DATE".zip
 else
     echo "Build failed!"
 fi
