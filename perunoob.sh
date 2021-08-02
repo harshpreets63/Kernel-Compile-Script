@@ -12,7 +12,7 @@ if [ -d "CLANG-13" ]; then
  else
 git clone --depth=1 https://github.com/kdrag0n/proton-clang CLANG-13
 fi
-if [ -d "LIBUFDT" ]; then
+if [ -d "scripts/ufdt/libufdt" ]; then
 echo "LIBUFDT Exist Skipping Download"
 else
 git clone https://android.googlesource.com/platform/system/libufdt scripts/ufdt/libufdt
